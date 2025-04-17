@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Получаем элементы DOM
+
   const productsContainer = document.getElementById('products-container');
   const categorySelect = document.getElementById('category-select');
   
-  // Данные о товарах и категориях
+
   let products = [];
   let categories = [];
   
-  // Загрузка данных о товарах
+ 
   async function fetchProducts() {
     try {
       const response = await fetch('/api/products');
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       products = data.products;
       categories = data.categories;
       
-      // Отображаем товары и категории
+
       displayProducts(products);
       populateCategories(categories);
     } catch (error) {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Функция для отображения товаров
+
   function displayProducts(productsToDisplay) {
     productsContainer.innerHTML = '';
     
@@ -37,13 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const productCard = document.createElement('div');
       productCard.classList.add('product-card');
       
-      // Форматируем цену
+
       const formattedPrice = new Intl.NumberFormat('ru-RU', {
         style: 'currency',
         currency: 'RUB'
       }).format(product.price);
       
-      // Создаем теги категорий
+      
       const categoriesHTML = product.categories.map(category => 
         `<span class="category-tag">${category}</span>`
       ).join('');
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Функция для заполнения списка категорий
+
   function populateCategories(categoriesData) {
     categorySelect.innerHTML = '<option value="all">Все товары</option>';
     
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Обработчик изменения выбранной категории
+
   categorySelect.addEventListener('change', async () => {
     const selectedCategory = categorySelect.value;
     
@@ -91,6 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // Загружаем товары при загрузке страницы
+
   fetchProducts();
 }); 

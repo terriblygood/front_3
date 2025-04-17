@@ -5,10 +5,10 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// Статические файлы
+
 app.use(express.static(path.join(__dirname, '../client')));
 
-// Маршрут для получения всех товаров
+
 app.get('/api/products', (req, res) => {
   try {
     const productsData = fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8');
@@ -19,7 +19,7 @@ app.get('/api/products', (req, res) => {
   }
 });
 
-// Маршрут для получения товаров по категории
+
 app.get('/api/products/category/:categoryName', (req, res) => {
   try {
     const categoryName = req.params.categoryName;
@@ -36,7 +36,7 @@ app.get('/api/products/category/:categoryName', (req, res) => {
   }
 });
 
-// Маршрут для корневой страницы
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });

@@ -16,16 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
   const closeBtns = document.querySelectorAll('.close');
   
-  // Данные
+
   let products = [];
   let categories = [];
   let currentProductId = null;
   let productToDeleteId = null;
   
-  // API URL
+
   const API_URL = 'http://localhost:8080/api';
   
-  // Загрузка данных о товарах и категориях
+
   async function fetchProducts() {
     try {
       const response = await fetch(`${API_URL}/products`);
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Отображение товаров в таблице
+
   function renderProducts() {
     productsList.innerHTML = '';
     
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
       productsList.appendChild(tr);
     });
     
-    // Добавление обработчиков событий
+
     document.querySelectorAll('.edit-btn').forEach(btn => {
       btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.id)));
     });
@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Отображение категорий в форме
   function renderCategories(selectedCategories = []) {
     categoriesContainer.innerHTML = '';
     
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Открытие модального окна для добавления товара
+
   function openAddModal() {
     modalTitle.textContent = 'Добавить товар';
     productForm.reset();
@@ -114,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productModal.style.display = 'block';
   }
   
-  // Открытие модального окна для редактирования товара
+ 
   function openEditModal(productId) {
     const product = products.find(p => p.id === productId);
     
@@ -135,13 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
     productModal.style.display = 'block';
   }
   
-  // Открытие модального окна для подтверждения удаления
+
   function openDeleteConfirmation(productId) {
     productToDeleteId = productId;
     confirmModal.style.display = 'block';
   }
   
-  // Добавление или обновление товара
+
   async function saveProduct(productData) {
     try {
       const url = currentProductId 
@@ -170,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Добавление нескольких товаров
+
   async function addBulkProducts(productsData) {
     try {
       const response = await fetch(`${API_URL}/products/bulk`, {
@@ -193,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Удаление товара
+
   async function deleteProduct(productId) {
     try {
       const response = await fetch(`${API_URL}/products/${productId}`, {
@@ -217,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     alert(message);
   }
   
-  // Обработчики событий
+
   addProductBtn.addEventListener('click', openAddModal);
   
   addBulkBtn.addEventListener('click', () => {
@@ -289,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Закрытие модальных окон при клике вне их содержимого
+
   window.addEventListener('click', (e) => {
     if (e.target === productModal) {
       productModal.style.display = 'none';
@@ -300,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
       productToDeleteId = null;
     }
   });
-  
-  // Загрузка товаров при загрузке страницы
+
   fetchProducts();
 }); 
