@@ -5,22 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Интернет-магазин</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <header>
     <h1>Наш интернет-магазин</h1>
-    <div class="category-filter">
-      <span>Фильтр по категориям:</span>
-      <select id="category-select">
-        <option value="all">Все товары</option>
-       
-      </select>
+    <div class="filters">
+      <div class="category-filter">
+        <span>Фильтр по категориям:</span>
+        <select id="category-select">
+          <option value="all">Все товары</option>
+        </select>
+      </div>
+      <div class="view-options">
+        <span>Показать:</span>
+        <select id="view-select">
+          <option value="full">Полная информация</option>
+          <option value="names-prices">Названия и цены</option>
+          <option value="names-descriptions">Названия и описания</option>
+        </select>
+      </div>
     </div>
   </header>
 
   <main>
     <div class="products-container" id="products-container">
-      
+      <!-- Карточки товаров будут добавлены через JavaScript -->
+    </div>
+    
+    <div class="chat-container">
+      <div class="chat-header">
+        <h3>Чат с поддержкой</h3>
+        <button id="toggle-chat">Открыть чат</button>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="messages" id="messages"></div>
+        <div class="chat-input">
+          <input type="text" id="chat-input" placeholder="Введите сообщение..." />
+          <button id="send-message">Отправить</button>
+        </div>
+      </div>
     </div>
   </main>
 

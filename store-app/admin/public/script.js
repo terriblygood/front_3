@@ -16,16 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
   const closeBtns = document.querySelectorAll('.close');
   
-
+  // Элементы чата
+  const toggleChatBtn = document.getElementById('toggle-chat');
+  const chatBody = document.getElementById('chat-body');
+  const messagesContainer = document.getElementById('messages');
+  const chatInput = document.getElementById('chat-input');
+  const sendMessageBtn = document.getElementById('send-message');
+  
   let products = [];
   let categories = [];
   let currentProductId = null;
   let productToDeleteId = null;
   
-
   const API_URL = 'http://localhost:8080/api';
   
-
+  // WebSocket для чата - подключаемся к клиентскому серверу
+  const socket = io('http://localhost:3000');
+  const adminName = 'Администратор';
+  
   async function fetchProducts() {
     try {
       const response = await fetch(`${API_URL}/products`);
@@ -39,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-
   function renderProducts() {
     productsList.innerHTML = '';
     
@@ -76,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
       productsList.appendChild(tr);
     });
     
-
     document.querySelectorAll('.edit-btn').forEach(btn => {
       btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.id)));
     });
@@ -104,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-
   function openAddModal() {
     modalTitle.textContent = 'Добавить товар';
     productForm.reset();
@@ -113,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     productModal.style.display = 'block';
   }
   
- 
   function openEditModal(productId) {
     const product = products.find(p => p.id === productId);
     
@@ -134,13 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
     productModal.style.display = 'block';
   }
   
-
   function openDeleteConfirmation(productId) {
     productToDeleteId = productId;
     confirmModal.style.display = 'block';
   }
   
-
   async function saveProduct(productData) {
     try {
       const url = currentProductId 
@@ -169,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-
   async function addBulkProducts(productsData) {
     try {
       const response = await fetch(`${API_URL}/products/bulk`, {
@@ -192,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-
   async function deleteProduct(productId) {
     try {
       const response = await fetch(`${API_URL}/products/${productId}`, {
@@ -211,12 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Отображение ошибки
   function showError(message) {
     alert(message);
   }
   
-
   addProductBtn.addEventListener('click', openAddModal);
   
   addBulkBtn.addEventListener('click', () => {
@@ -288,7 +286,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-
+  // Функциональность чата
+  
+  // Переключение видимости чата
+  toggleChatBtn.addEventListener('click', () => {
+    if (chatBody.classList.contains('open')) {
+      chatBody.classList.remove('open');
+      toggleChatBtn.textContent = 'Открыть чат';
+    } else {
+      chatBody.classList.add('open');
+      toggleChatBtn.textContent = 'Закрыть чат';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  });
+  
+  // Отправка сообщения
+  function sendMessage() {
+    const messageText = chatInput.value.trim();
+    if (messageText === '') return;
+    
+    const message = {
+      text: messageText,
+      sender: adminName,
+      role: 'admin',
+      timestamp: new Date().toISOString()
+    };
+    
+    socket.emit('chat message', message);
+    chatInput.value = '';
+  }
+  
+  // Обработчик нажатия кнопки отправки сообщения
+  sendMessageBtn.addEventListener('click', sendMessage);
+  
+  // Обработчик нажатия Enter в поле ввода
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  // Обработчик получения нового сообщения
+  socket.on('chat message', (msg) => {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    
+    if (msg.role === 'admin') {
+      messageElement.classList.add('admin');
+    } else {
+      messageElement.classList.add('user');
+    }
+    
+    const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    messageElement.innerHTML = `
+      <div class="message-header">
+        <span class="sender">${msg.sender}</span>
+        <span class="time">${time}</span>
+      </div>
+      <div class="message-text">${msg.text}</div>
+    `;
+    
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  });
+  
   window.addEventListener('click', (e) => {
     if (e.target === productModal) {
       productModal.style.display = 'none';

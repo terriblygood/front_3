@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Панель администратора</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <div class="container">
@@ -40,6 +41,20 @@
               <!-- Товары будут добавлены через JavaScript -->
             </tbody>
           </table>
+        </div>
+      </div>
+      
+      <div class="chat-container">
+        <div class="chat-header">
+          <h3>Чат с клиентами</h3>
+          <button id="toggle-chat">Открыть чат</button>
+        </div>
+        <div class="chat-body" id="chat-body">
+          <div class="messages" id="messages"></div>
+          <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Введите сообщение..." />
+            <button id="send-message">Отправить</button>
+          </div>
         </div>
       </div>
     </main>
