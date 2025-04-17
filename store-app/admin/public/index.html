@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель администратора</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Панель администратора</h1>
+      <div class="header-links">
+        <a href="/" class="active">Товары</a>
+        <a href="http://localhost:3000" target="_blank">Перейти в магазин</a>
+        <a href="/spec" target="_blank">API документация</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="controls">
+        <button id="add-product-btn" class="btn primary">Добавить товар</button>
+        <button id="add-bulk-btn" class="btn secondary">Добавить несколько товаров</button>
+      </div>
+
+      <div class="product-list-container">
+        <h2>Список товаров</h2>
+        <div id="products-table-container">
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Категории</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="products-list">
+              <!-- Товары будут добавлены через JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Модальное окно для добавления/редактирования товара -->
+    <div id="product-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modal-title">Добавить товар</h2>
+        <form id="product-form">
+          <div class="form-group">
+            <label for="product-name">Название:</label>
+            <input type="text" id="product-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="product-price">Цена:</label>
+            <input type="number" id="product-price" name="price" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="product-description">Описание:</label>
+            <textarea id="product-description" name="description" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Категории:</label>
+            <div id="categories-container">
+              <!-- Категории будут добавлены через JavaScript -->
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Сохранить</button>
+            <button type="button" class="btn secondary" id="cancel-btn">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления нескольких товаров -->
+    <div id="bulk-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить несколько товаров</h2>
+        <p>Введите JSON-массив товаров в формате:</p>
+        <pre>
+[
+  {
+    "name": "Название товара",
+    "price": 1000,
+    "description": "Описание товара",
+    "categories": ["Категория1", "Категория2"]
+  },
+  {
+    ...
+  }
+]
+        </pre>
+        <form id="bulk-form">
+          <div class="form-group">
+            <textarea id="bulk-json" rows="10" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Добавить</button>
+            <button type="button" class="btn secondary" id="bulk-cancel-btn">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модальное окно для подтверждения удаления -->
+    <div id="confirm-modal" class="modal">
+      <div class="modal-content">
+        <h2>Подтверждение удаления</h2>
+        <p>Вы уверены, что хотите удалить товар?</p>
+        <div class="form-actions">
+          <button id="confirm-delete-btn" class="btn danger">Удалить</button>
+          <button id="cancel-delete-btn" class="btn secondary">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html> 
