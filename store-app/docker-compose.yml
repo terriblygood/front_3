@@ -1,0 +1,12 @@
+services:
+  store-app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+    volumes:
+      - ./server/products.json:/app/server/products.json
+      - ./admin/public:/app/admin/public
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped 
